@@ -3,48 +3,82 @@ using System.Collections;
 
 public class tankController : MonoBehaviour
 {
-    public float moveSpeed;
-    public Vector3 currentPosition;
+    public float speed;
+    public Sprite[] sprites;
 
-    private Vector3 moveDirection;
+    Vector2 positionRound = new Vector2();
+    float vert, horiz;
+    string direction = "Up";
+    string prevDirection = "Up";
+    string axis = "Horiz";
+    string prevAxis = "Horiz";
 
+    private SpriteRenderer spriteRenderer;
 
-    // Update is called once per frame
-    void Update()
+    void Start()
     {
-        /*
-        // 1
-        Vector3 currentPosition = transform.position;
-        // 2
-        if (Input.GetButton("Horizontal"))
-        {
-            // 3
-            Vector3 moveToward = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            // 4
-            moveDirection = moveToward - currentPosition;
-            moveDirection.z = 0;
-            moveDirection.Normalize();
-            Debug.Log(moveDirection);
-            Vector3 target = moveDirection * moveSpeed + currentPosition;
-            transform.position = Vector3.Lerp(currentPosition, target, Time.deltaTime);
-        }
-
-        //Vector3 target = moveDirection * moveSpeed + currentPosition;
-        //transform.position = Vector3.Lerp(currentPosition, target, Time.deltaTime);
-        */
+        spriteRenderer = renderer as SpriteRenderer;
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        currentPosition = transform.position;
+        vert = Input.GetAxisRaw("Vertical") * speed;
+        horiz = Input.GetAxisRaw("Horizontal") * speed;
 
-        if (Input.GetButton("Horizontal") || Input.GetButton("Vertical"))
+        if (vert != 0)
         {
-            var direction = new Vector3(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"), 0).normalized;
-            transform.position = (currentPosition + direction * moveSpeed);
+            axis = "Vert";
+            if (vert < 0)
+            {
+                direction = "Down";
+                spriteRenderer.sprite = sprites[1];
+            }
+            else
+            {
+                direction = "Top";
+                spriteRenderer.sprite = sprites[0];
+            }
+            vert *= Time.deltaTime;
+            transform.Translate(0, vert, 0);
+        }
+        else if (horiz != 0)
+        {
+            axis = "Horiz";
+            if (horiz < 0)
+            {
+                direction = "Left";
+                spriteRenderer.sprite = sprites[2];
+            }
+            else
+            {
+                direction = "Right";
+                spriteRenderer.sprite = sprites[3];
+            }
+            horiz *= Time.deltaTime;
+            transform.Translate(horiz, 0, 0);
         }
 
+        if (prevAxis != axis)
+        {
+            SnapGrid();
+            prevAxis = axis;
+        }
 
-        Debug.Log(currentPosition);
+        Round();
+    }
+
+    void SnapGrid()
+    {
+        Debug.Log("snap");
+        float roundX = (float)System.Math.Round((transform.position.x * 100) / 32) * 32;
+        float roundY = (float)System.Math.Round((transform.position.y * 100) / 32) * 32;
+        transform.position = new Vector2(roundX / 100, roundY / 100);
+    }
+
+    void Round()
+    {
+        positionRound.x = ((float)System.Math.Round(transform.position.x, 2));
+        positionRound.y = ((float)System.Math.Round(transform.position.y, 2));
+        transform.position = positionRound;
     }
 }
