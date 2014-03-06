@@ -6,6 +6,9 @@ public class tankController : MonoBehaviour
     public float speed;
     public Sprite[] sprites;
 
+    public int x;
+    public int y;
+    
     Vector2 positionRound = new Vector2();
     float vert, horiz;
     string direction = "Up";
@@ -15,9 +18,16 @@ public class tankController : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
 
+    public createLevel targScript;
+
     void Start()
     {
         spriteRenderer = renderer as SpriteRenderer;
+    }
+
+    void FixedUpdate()
+    {
+        Debug.Log(targScript.leveldata);
     }
 
     void Update()
