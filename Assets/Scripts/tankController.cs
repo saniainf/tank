@@ -8,7 +8,7 @@ public class tankController : MonoBehaviour
 
     public int x;
     public int y;
-    
+
     Vector2 positionRound = new Vector2();
     float vert, horiz;
     string direction = "Up";
@@ -18,7 +18,12 @@ public class tankController : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
 
-    public createLevel targScript;
+    createLevel gameBoard;
+
+    void Awake()
+    {
+        gameBoard = GameObject.Find("background").GetComponent<createLevel>();
+    }
 
     void Start()
     {
@@ -27,7 +32,22 @@ public class tankController : MonoBehaviour
 
     void FixedUpdate()
     {
-        Debug.Log(targScript.leveldata);
+        if (Input.GetKeyDown("space"))
+        {
+            for (int j = gameBoard.walls.GetLength(1) - 1; j >= 0; j--)
+            {
+                for (int i = 0; i < gameBoard.walls.GetLength(0); i++)
+                {
+                    if (gameBoard.getTypeBricks(i, j) == null)
+                        Debug.Log("0");
+                    else if (gameBoard.getTypeBricks(i, j).tag == "wallBrick")
+                        Debug.Log("1");
+                    else if (gameBoard.getTypeBricks(i, j).tag == "wallSteel")
+                        Debug.Log("2");
+                    //Debug.Log(gameBoard.getTypeBricks(i, j));
+                }
+            }
+        }
     }
 
     void Update()
@@ -79,7 +99,6 @@ public class tankController : MonoBehaviour
 
     void SnapGrid()
     {
-        Debug.Log("snap");
         float roundX = (float)System.Math.Round((transform.position.x * 100) / 32) * 32;
         float roundY = (float)System.Math.Round((transform.position.y * 100) / 32) * 32;
         transform.position = new Vector2(roundX / 100, roundY / 100);

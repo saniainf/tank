@@ -32,9 +32,16 @@ public class createLevel : MonoBehaviour
         }
     }
 
+    public GameObject getTypeBricks(int i, int j)
+    {
+        return walls[i, j];
+    }
+
     // Update is called once per frame
     void Update()
     {
         //walls[1, 7].transform.Translate(new Vector3(0.01f, 0.01f, 0));
     }
+
+
 }
