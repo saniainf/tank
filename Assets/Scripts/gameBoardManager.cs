@@ -6,6 +6,7 @@ public class gameBoardManager : MonoBehaviour
 {
     public TextAsset[] levels;
     public GameObject[] cells;
+    public GameObject tstCell;
 
     private GameObject[,] gameBoard = new GameObject[26, 28]; //[i, j]
 
