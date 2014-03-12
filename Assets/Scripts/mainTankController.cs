@@ -70,7 +70,9 @@ public class mainTankController : MonoBehaviour
                 break;
         }
 
-        if (gameBoard._getTypeBricks(pointLeft.x, pointLeft.y) || gameBoard._getTypeBricks(pointRight.x, pointRight.y))
+        if (gameBoard._getTypeBricks(pointLeft.x, pointLeft.y) || gameBoard._getTypeBricks(pointRight.x, pointRight.y) ||
+            pointLeft.x < 0 || pointLeft.x > gameBoard._gameBoardWidth ||
+            pointLeft.y < 0 || pointLeft.y > gameBoard._gameBoardHeight)
         {
             SnapGrid();
         }

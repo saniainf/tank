@@ -51,9 +51,10 @@ public class gameBoardManager : MonoBehaviour
     {
         var reader = new StringReader(levels[0].text);
         GameObject nextCell = null;
+        bool cellHalf = false;
 
         string line = reader.ReadLine();
-        for (int j = 0; j < gameBoardCellsHight; j += 2)
+        for (int j = gameBoardCellsHight - 2; j >= 0; j -= 2)
         {
             for (int i = 0, c = 0; i < gameBoardCellsWidth; i += 2, c++)
             {
@@ -61,10 +62,40 @@ public class gameBoardManager : MonoBehaviour
                 {
                     case '#':
                         nextCell = cells[0];
+                        cellHalf = false;
+                        break;
+
+                    case 'a':
+                    case 'd':
+                    case 'w':
+                    case 's':
+                        nextCell = cells[0];
+                        cellHalf = true;
                         break;
 
                     case '@':
                         nextCell = cells[1];
+                        cellHalf = false;
+                        break;
+
+                    case 'f':
+                    case 'h':
+                    case 't':
+                    case 'g':
+                        nextCell = cells[1];
+                        cellHalf = true;
+                        break;
+
+                    case 'W':
+                        nextCell = null;
+                        break;
+
+                    case 'G':
+                        nextCell = null;
+                        break;
+
+                    case 'I':
+                        nextCell = null;
                         break;
 
                     case '.':
@@ -72,12 +103,46 @@ public class gameBoardManager : MonoBehaviour
                         break;
                 }
 
-                if (nextCell != null)
+                //full cells
+                if (nextCell != null && cellHalf == false)
                 {
                     gameBoard[i, j] = Instantiate(nextCell, new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
                     gameBoard[i + 1, j] = Instantiate(nextCell, new Vector3((i * cellWidth + cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
                     gameBoard[i, j + 1] = Instantiate(nextCell, new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight + cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
                     gameBoard[i + 1, j + 1] = Instantiate(nextCell, new Vector3((i * cellWidth + cellWidth) + cellHalfWidth, (j * cellHeight + cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
+                }
+
+                //half cells
+                if (nextCell != null && cellHalf == true)
+                {
+                    if (line[c] == 'w' || line[c] == 't')
+                    {
+                        //gameBoard[i, j] = Instantiate(nextCell, new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
+                        //gameBoard[i + 1, j] = Instantiate(nextCell, new Vector3((i * cellWidth + cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
+                        gameBoard[i, j + 1] = Instantiate(nextCell, new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight + cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
+                        gameBoard[i + 1, j + 1] = Instantiate(nextCell, new Vector3((i * cellWidth + cellWidth) + cellHalfWidth, (j * cellHeight + cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
+                    }
+                    else if (line[c] == 's' || line[c] == 'g')
+                    {
+                        gameBoard[i, j] = Instantiate(nextCell, new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
+                        gameBoard[i + 1, j] = Instantiate(nextCell, new Vector3((i * cellWidth + cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
+                        //gameBoard[i, j + 1] = Instantiate(nextCell, new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight + cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
+                        //gameBoard[i + 1, j + 1] = Instantiate(nextCell, new Vector3((i * cellWidth + cellWidth) + cellHalfWidth, (j * cellHeight + cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
+                    }
+                    else if (line[c] == 'a' || line[c] == 'f')
+                    {
+                        gameBoard[i, j] = Instantiate(nextCell, new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
+                        //gameBoard[i + 1, j] = Instantiate(nextCell, new Vector3((i * cellWidth + cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
+                        gameBoard[i, j + 1] = Instantiate(nextCell, new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight + cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
+                        //gameBoard[i + 1, j + 1] = Instantiate(nextCell, new Vector3((i * cellWidth + cellWidth) + cellHalfWidth, (j * cellHeight + cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
+                    }
+                    else if (line[c] == 'd' || line[c] == 'h')
+                    {
+                        //gameBoard[i, j] = Instantiate(nextCell, new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
+                        gameBoard[i + 1, j] = Instantiate(nextCell, new Vector3((i * cellWidth + cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
+                        //gameBoard[i, j + 1] = Instantiate(nextCell, new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight + cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
+                        gameBoard[i + 1, j + 1] = Instantiate(nextCell, new Vector3((i * cellWidth + cellWidth) + cellHalfWidth, (j * cellHeight + cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
+                    }
                 }
             }
             line = reader.ReadLine();
@@ -86,7 +151,7 @@ public class gameBoardManager : MonoBehaviour
 
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
