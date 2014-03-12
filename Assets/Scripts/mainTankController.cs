@@ -3,22 +3,8 @@ using System.Collections;
 
 public class mainTankController : MonoBehaviour
 {
-    public float speed;
-    public Sprite[] sprites;
-
-    enum Direction
-    {
-        UP,
-        DOWN,
-        LEFT,
-        RIGHTS
-    }
-
-    enum Axis
-    {
-        HORIZONTAL,
-        VERTICAL
-    }
+    enum Direction { UP, DOWN, LEFT, RIGHTS }
+    enum Axis { HORIZONTAL, VERTICAL }
 
     private gameBoardManager gameBoard;
     private SpriteRenderer spriteRenderer;
@@ -26,8 +12,10 @@ public class mainTankController : MonoBehaviour
     private Axis axis = Axis.HORIZONTAL;
     private Axis previousAxis = Axis.VERTICAL;
     private Direction direction = Direction.UP;
-    private Direction previousDirection = Direction.UP;
     private Vector2 positionRound = new Vector2();
+
+    public float speed;
+    public Sprite[] sprites;
 
     void Awake()
     {
@@ -49,49 +37,42 @@ public class mainTankController : MonoBehaviour
     private void tankCollision()
     {
         Vector2 pointLeft = new Vector2();
-        Vector2 pointRight = new Vector2(); 
+        Vector2 pointRight = new Vector2();
 
-        if (direction == Direction.UP)
+        switch (direction)
         {
-            pointLeft.x = transform.position.x - 0.16f;
-            pointLeft.y = transform.position.y + 0.32f;
-            pointRight.x = transform.position.x + 0.16f;
-            pointRight.y = transform.position.y + 0.32f;
+            case Direction.UP:
+                pointLeft.x = transform.position.x - gameBoard._cellHalfWidth;
+                pointLeft.y = transform.position.y + gameBoard._cellHeight;
+                pointRight.x = transform.position.x + gameBoard._cellHalfWidth;
+                pointRight.y = transform.position.y + gameBoard._cellHeight;
+                break;
+
+            case Direction.DOWN:
+                pointLeft.x = transform.position.x + gameBoard._cellHalfWidth;
+                pointLeft.y = transform.position.y - gameBoard._cellHeight;
+                pointRight.x = transform.position.x - gameBoard._cellHalfWidth;
+                pointRight.y = transform.position.y - gameBoard._cellHeight;
+                break;
+
+            case Direction.LEFT:
+                pointLeft.x = transform.position.x - gameBoard._cellWidth;
+                pointLeft.y = transform.position.y - gameBoard._cellHalfHeight;
+                pointRight.x = transform.position.x - gameBoard._cellWidth;
+                pointRight.y = transform.position.y + gameBoard._cellHalfHeight;
+                break;
+
+            case Direction.RIGHTS:
+                pointLeft.x = transform.position.x + gameBoard._cellWidth;
+                pointLeft.y = transform.position.y + gameBoard._cellHalfHeight;
+                pointRight.x = transform.position.x + gameBoard._cellWidth;
+                pointRight.y = transform.position.y - gameBoard._cellHalfHeight;
+                break;
         }
 
-        if (direction == Direction.DOWN)
-        {
-            pointLeft.x = transform.position.x + 0.16f;
-            pointLeft.y = transform.position.y - 0.32f;
-            pointRight.x = transform.position.x - 0.16f;
-            pointRight.y = transform.position.y - 0.32f;
-        }
-
-        if (direction == Direction.LEFT)
-        {
-            pointLeft.x = transform.position.x - 0.32f;
-            pointLeft.y = transform.position.y - 0.16f;
-            pointRight.x = transform.position.x - 0.32f;
-            pointRight.y = transform.position.y + 0.16f;
-        }
-
-        if (direction == Direction.RIGHTS)
-        {
-            pointLeft.x = transform.position.x + 0.32f;
-            pointLeft.y = transform.position.y + 0.16f;
-            pointRight.x = transform.position.x + 0.32f;
-            pointRight.y = transform.position.y - 0.16f;
-        }
-
-        int il = (int)(pointLeft.x / 0.32f);
-        int jl = (int)(pointLeft.y / 0.32f);
-        int ir = (int)(pointRight.x / 0.32f);
-        int jr = (int)(pointRight.y / 0.32f);
-
-        if (gameBoard.getTypeBricks(il, jl) || gameBoard.getTypeBricks(ir, jr))
+        if (gameBoard._getTypeBricks(pointLeft.x, pointLeft.y) || gameBoard._getTypeBricks(pointRight.x, pointRight.y))
         {
             SnapGrid();
-            Debug.Log("snap");
         }
     }
 
@@ -144,9 +125,9 @@ public class mainTankController : MonoBehaviour
 
     void SnapGrid()
     {
-        float roundX = (float)System.Math.Round((transform.position.x * 100) / 32) * 32;
-        float roundY = (float)System.Math.Round((transform.position.y * 100) / 32) * 32;
-        transform.position = new Vector2(roundX / 100, roundY / 100);
+        float roundX = (float)System.Math.Round((transform.position.x) / (gameBoard._cellWidth)) * (gameBoard._cellWidth);
+        float roundY = (float)System.Math.Round((transform.position.y) / (gameBoard._cellHeight)) * (gameBoard._cellHeight);
+        transform.position = new Vector2(roundX, roundY);
     }
 
     void Round()
