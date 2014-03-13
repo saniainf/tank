@@ -3,7 +3,7 @@ using System.Collections;
 
 public class mainTankController : MonoBehaviour
 {
-    enum Direction { UP, DOWN, LEFT, RIGHTS }
+    public enum Direction { UP, DOWN, LEFT, RIGHTS }
     enum Axis { HORIZONTAL, VERTICAL }
 
     private gameBoardManager gameBoard;
@@ -13,9 +13,11 @@ public class mainTankController : MonoBehaviour
     private Axis previousAxis = Axis.VERTICAL;
     private Direction direction = Direction.UP;
     private Vector2 positionRound = new Vector2();
+    private GameObject bullets;
 
     public float speed;
     public Sprite[] sprites;
+    public GameObject bullet;
 
     void Awake()
     {
@@ -32,6 +34,17 @@ public class mainTankController : MonoBehaviour
     {
         keyController();
         tankCollision();
+
+        if (Input.GetButtonDown("Fire1"))
+        {
+            if (!bullets)
+            {
+                bullets = Instantiate(bullet, transform.position, transform.rotation) as GameObject;
+            }
+        }
+        if (Input.GetButtonDown("Fire2"))
+            Destroy(bullets);
+        Debug.Log(bullets);
     }
 
     private void tankCollision()
