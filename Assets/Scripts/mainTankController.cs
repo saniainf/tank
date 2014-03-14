@@ -3,10 +3,17 @@ using System.Collections;
 
 public class mainTankController : MonoBehaviour
 {
-    public enum Direction { UP, DOWN, LEFT, RIGHTS }
+    enum Direction { UP, DOWN, LEFT, RIGHTS }
     enum Axis { HORIZONTAL, VERTICAL }
 
-    private gameBoardManager gameBoard;
+    public gameBoardManager gameBoard;
+    public Transform helper;
+    public Transform leftHelper;
+    public Transform rightHelper;
+    public float speed;
+    public Sprite[] sprites;
+    public GameObject bullet;
+
     private SpriteRenderer spriteRenderer;
     private float vectorVertical, vectorHorizontal;
     private Axis axis = Axis.HORIZONTAL;
@@ -15,13 +22,8 @@ public class mainTankController : MonoBehaviour
     private Vector2 positionRound = new Vector2();
     private GameObject bullets;
 
-    public float speed;
-    public Sprite[] sprites;
-    public GameObject bullet;
-
     void Awake()
     {
-        gameBoard = GameObject.Find("gameBoard").GetComponent<gameBoardManager>();
         spriteRenderer = renderer as SpriteRenderer;
     }
 
@@ -39,53 +41,20 @@ public class mainTankController : MonoBehaviour
         {
             if (!bullets)
             {
-                bullets = Instantiate(bullet, transform.position, transform.rotation) as GameObject;
+                //bullets = Instantiate(bullet, transform.position, transform.rotation) as GameObject;
+                //var bc = bullets.GetComponent<bulletController>();
+                //bc.type = bulletController.TypeBullet.one;
+                //Debug.Log(bc);
             }
         }
-        if (Input.GetButtonDown("Fire2"))
-            Destroy(bullets);
-        Debug.Log(bullets);
     }
 
     private void tankCollision()
     {
-        Vector2 pointLeft = new Vector2();
-        Vector2 pointRight = new Vector2();
-
-        switch (direction)
-        {
-            case Direction.UP:
-                pointLeft.x = transform.position.x - gameBoard._cellHalfWidth;
-                pointLeft.y = transform.position.y + gameBoard._cellHeight;
-                pointRight.x = transform.position.x + gameBoard._cellHalfWidth;
-                pointRight.y = transform.position.y + gameBoard._cellHeight;
-                break;
-
-            case Direction.DOWN:
-                pointLeft.x = transform.position.x + gameBoard._cellHalfWidth;
-                pointLeft.y = transform.position.y - gameBoard._cellHeight;
-                pointRight.x = transform.position.x - gameBoard._cellHalfWidth;
-                pointRight.y = transform.position.y - gameBoard._cellHeight;
-                break;
-
-            case Direction.LEFT:
-                pointLeft.x = transform.position.x - gameBoard._cellWidth;
-                pointLeft.y = transform.position.y - gameBoard._cellHalfHeight;
-                pointRight.x = transform.position.x - gameBoard._cellWidth;
-                pointRight.y = transform.position.y + gameBoard._cellHalfHeight;
-                break;
-
-            case Direction.RIGHTS:
-                pointLeft.x = transform.position.x + gameBoard._cellWidth;
-                pointLeft.y = transform.position.y + gameBoard._cellHalfHeight;
-                pointRight.x = transform.position.x + gameBoard._cellWidth;
-                pointRight.y = transform.position.y - gameBoard._cellHalfHeight;
-                break;
-        }
-
-        if (gameBoard._getTypeBricks(pointLeft.x, pointLeft.y) || gameBoard._getTypeBricks(pointRight.x, pointRight.y) ||
-            pointLeft.x < 0 || pointLeft.x > gameBoard._gameBoardWidth ||
-            pointLeft.y < 0 || pointLeft.y > gameBoard._gameBoardHeight)
+        if (gameBoard._getTypeBricks(leftHelper.transform.position) ||
+            gameBoard._getTypeBricks(rightHelper.transform.position) ||
+            leftHelper.transform.position.x < 0 || leftHelper.transform.position.x > gameBoard._gameBoardWidth ||
+            leftHelper.transform.position.y < 0 || leftHelper.transform.position.y > gameBoard._gameBoardHeight)
         {
             SnapGrid();
         }
@@ -103,11 +72,13 @@ public class mainTankController : MonoBehaviour
             {
                 direction = Direction.DOWN;
                 spriteRenderer.sprite = sprites[1];
+                helper.transform.rotation = Quaternion.Euler(0, 0, 180);
             }
             else
             {
                 direction = Direction.UP;
                 spriteRenderer.sprite = sprites[0];
+                helper.transform.rotation = Quaternion.Euler(0, 0, 0);
             }
             vectorVertical *= Time.deltaTime;
             transform.Translate(0, vectorVertical, 0);
@@ -119,11 +90,13 @@ public class mainTankController : MonoBehaviour
             {
                 direction = Direction.LEFT;
                 spriteRenderer.sprite = sprites[2];
+                helper.transform.rotation = Quaternion.Euler(0, 0, 90);
             }
             else
             {
                 direction = Direction.RIGHTS;
                 spriteRenderer.sprite = sprites[3];
+                helper.transform.rotation = Quaternion.Euler(0, 0, 270);
             }
             vectorHorizontal *= Time.deltaTime;
             transform.Translate(vectorHorizontal, 0, 0);

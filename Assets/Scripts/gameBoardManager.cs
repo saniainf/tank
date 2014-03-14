@@ -149,22 +149,29 @@ public class gameBoardManager : MonoBehaviour
         }
     }
 
+    private void fillGameBoard()
+    {
+
+    }
+
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
-    public GameObject _getTypeBricks(float x, float y)
+    public GameObject _getTypeBricks(Vector3 pos)
     {
-        if (x > 0 && x < gameBoardWidth && y > 0 && y < gameBoardHeight)
+        if (pos.x > 0 && pos.x < gameBoardWidth && pos.y > 0 && pos.y < gameBoardHeight)
         {
-            return gameBoard[(int)(x / cellWidth), (int)(y / cellHeight)];
+            Debug.Log(gameBoard[3, 4]);
+            //Debug.Log(gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)]);
+            return gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)];
         }
         return null;
     }
