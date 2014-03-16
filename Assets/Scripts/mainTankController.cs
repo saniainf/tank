@@ -11,8 +11,8 @@ public class mainTankController : MonoBehaviour
     public Transform leftHelper;
     public Transform rightHelper;
     public float speed;
-    public Sprite[] sprites;
     public GameObject bullet;
+    public Sprite[] sprites;
 
     private SpriteRenderer spriteRenderer;
     private float vectorVertical, vectorHorizontal;
@@ -41,9 +41,9 @@ public class mainTankController : MonoBehaviour
         {
             if (!bullets)
             {
-                //bullets = Instantiate(bullet, transform.position, transform.rotation) as GameObject;
-                //var bc = bullets.GetComponent<bulletController>();
-                //bc.type = bulletController.TypeBullet.one;
+                bullets = Instantiate(bullet, transform.position, helper.transform.rotation) as GameObject;
+                var bc = bullets.GetComponent<bulletController>();
+                bc.type = bulletController.TypeBullet.one;
                 //Debug.Log(bc);
             }
         }
