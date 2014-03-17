@@ -4,6 +4,8 @@ using System.IO;
 
 public class gameBoardManager : MonoBehaviour
 {
+    public enum Direction { UP, DOWN, LEFT, RIGHTS }
+
     const int gameBoardCellsHight = 26;
     const int gameBoardCellsWidth = 26;
     const float cellHeight = 0.32f;
@@ -165,12 +167,28 @@ public class gameBoardManager : MonoBehaviour
 
     }
 
-    public GameObject _getTypeBricks(Vector3 pos)
+    public bool _getCollisionCell(Vector3 pos)
     {
         if (pos.x > 0 && pos.x < gameBoardWidth && pos.y > 0 && pos.y < gameBoardHeight)
         {
-            return gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)];
+            if (gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)])
+            {
+                cellController cellCollision = gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)].GetComponent<cellController>();
+                return cellCollision.collision;
+            }
         }
-        return null;
+        return false;
+    }
+
+    public void _destroyBricks(Vector3 pos)
+    {
+        if (pos.x > 0 && pos.x < gameBoardWidth && pos.y > 0 && pos.y < gameBoardHeight)
+        {
+            if (gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)])
+            {
+                cellController cellCollision = gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)].GetComponent<cellController>();
+                cellCollision.hitCell();
+            }
+        }
     }
 }

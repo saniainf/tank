@@ -3,7 +3,6 @@ using System.Collections;
 
 public class mainTankController : MonoBehaviour
 {
-    enum Direction { UP, DOWN, LEFT, RIGHTS }
     enum Axis { HORIZONTAL, VERTICAL }
 
     public gameBoardManager gameBoard;
@@ -18,7 +17,6 @@ public class mainTankController : MonoBehaviour
     private float vectorVertical, vectorHorizontal;
     private Axis axis = Axis.HORIZONTAL;
     private Axis previousAxis = Axis.VERTICAL;
-    private Direction direction = Direction.UP;
     private Vector2 positionRound = new Vector2();
     private GameObject bullets;
 
@@ -51,8 +49,8 @@ public class mainTankController : MonoBehaviour
 
     private void tankCollision()
     {
-        if (gameBoard._getTypeBricks(leftHelper.transform.position) ||
-            gameBoard._getTypeBricks(rightHelper.transform.position) ||
+        if (gameBoard._getCollisionCell(leftHelper.transform.position) ||
+            gameBoard._getCollisionCell(rightHelper.transform.position) ||
             leftHelper.transform.position.x < 0 || leftHelper.transform.position.x > gameBoard._gameBoardWidth ||
             leftHelper.transform.position.y < 0 || leftHelper.transform.position.y > gameBoard._gameBoardHeight)
         {
@@ -70,13 +68,11 @@ public class mainTankController : MonoBehaviour
             axis = Axis.VERTICAL;
             if (vectorVertical < 0)
             {
-                direction = Direction.DOWN;
                 spriteRenderer.sprite = sprites[1];
                 helper.transform.rotation = Quaternion.Euler(0, 0, 180);
             }
             else
             {
-                direction = Direction.UP;
                 spriteRenderer.sprite = sprites[0];
                 helper.transform.rotation = Quaternion.Euler(0, 0, 0);
             }
@@ -88,13 +84,11 @@ public class mainTankController : MonoBehaviour
             axis = Axis.HORIZONTAL;
             if (vectorHorizontal < 0)
             {
-                direction = Direction.LEFT;
                 spriteRenderer.sprite = sprites[2];
                 helper.transform.rotation = Quaternion.Euler(0, 0, 90);
             }
             else
             {
-                direction = Direction.RIGHTS;
                 spriteRenderer.sprite = sprites[3];
                 helper.transform.rotation = Quaternion.Euler(0, 0, 270);
             }
