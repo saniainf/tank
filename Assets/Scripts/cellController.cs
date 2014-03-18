@@ -6,7 +6,15 @@ public class cellController : MonoBehaviour
 
     public bool collision;
     public bool solid;
+    public Sprite[] sprites;
+
     private int live = 1;
+    private SpriteRenderer spriteRenderer;
+
+    void Awake()
+    {
+        spriteRenderer = renderer as SpriteRenderer;
+    }
 
     // Use this for initialization
     void Start()
@@ -20,11 +28,29 @@ public class cellController : MonoBehaviour
 
     }
 
-    public void hitCell()
+    public void hitCell(int direction)
     {
         if (live > 0)
         {
             live--;
+            switch (direction)
+            {
+                case 0:
+                    spriteRenderer.sprite = sprites[2];
+                    break;
+
+                case 180:
+                    spriteRenderer.sprite = sprites[1];
+                    break;
+
+                case 90:
+                    spriteRenderer.sprite = sprites[4];
+                    break;
+
+                case 270:
+                    spriteRenderer.sprite = sprites[3];
+                    break;
+            }
         }
         else
         {

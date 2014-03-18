@@ -16,6 +16,7 @@ public class gameBoardManager : MonoBehaviour
     const float gameBoardWidth = cellWidth * gameBoardCellsWidth;
 
     private GameObject[,] gameBoard = new GameObject[gameBoardCellsWidth, gameBoardCellsHight]; //[i, j]
+    private cellController cellCollision;
 
     public int _gameBoardCellsHight { get { return gameBoardCellsHight; } }
     public int _gameBoardCellsWidth { get { return gameBoardCellsWidth; } }
@@ -50,6 +51,11 @@ public class gameBoardManager : MonoBehaviour
 
     // Use this for initialization
     void Awake()
+    {
+        fillGameBoard();
+    }
+
+    private void fillGameBoard()
     {
         var reader = new StringReader(levels[0].text);
         GameObject nextCell = null;
@@ -119,8 +125,6 @@ public class gameBoardManager : MonoBehaviour
                 {
                     if (line[c] == 'w' || line[c] == 't')
                     {
-                        //gameBoard[i, j] = Instantiate(nextCell, new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
-                        //gameBoard[i + 1, j] = Instantiate(nextCell, new Vector3((i * cellWidth + cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
                         gameBoard[i, j + 1] = Instantiate(nextCell, new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight + cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
                         gameBoard[i + 1, j + 1] = Instantiate(nextCell, new Vector3((i * cellWidth + cellWidth) + cellHalfWidth, (j * cellHeight + cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
                     }
@@ -128,32 +132,21 @@ public class gameBoardManager : MonoBehaviour
                     {
                         gameBoard[i, j] = Instantiate(nextCell, new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
                         gameBoard[i + 1, j] = Instantiate(nextCell, new Vector3((i * cellWidth + cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
-                        //gameBoard[i, j + 1] = Instantiate(nextCell, new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight + cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
-                        //gameBoard[i + 1, j + 1] = Instantiate(nextCell, new Vector3((i * cellWidth + cellWidth) + cellHalfWidth, (j * cellHeight + cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
                     }
                     else if (line[c] == 'a' || line[c] == 'f')
                     {
                         gameBoard[i, j] = Instantiate(nextCell, new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
-                        //gameBoard[i + 1, j] = Instantiate(nextCell, new Vector3((i * cellWidth + cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
                         gameBoard[i, j + 1] = Instantiate(nextCell, new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight + cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
-                        //gameBoard[i + 1, j + 1] = Instantiate(nextCell, new Vector3((i * cellWidth + cellWidth) + cellHalfWidth, (j * cellHeight + cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
                     }
                     else if (line[c] == 'd' || line[c] == 'h')
                     {
-                        //gameBoard[i, j] = Instantiate(nextCell, new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
                         gameBoard[i + 1, j] = Instantiate(nextCell, new Vector3((i * cellWidth + cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
-                        //gameBoard[i, j + 1] = Instantiate(nextCell, new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight + cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
                         gameBoard[i + 1, j + 1] = Instantiate(nextCell, new Vector3((i * cellWidth + cellWidth) + cellHalfWidth, (j * cellHeight + cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
                     }
                 }
             }
             line = reader.ReadLine();
         }
-    }
-
-    private void fillGameBoard()
-    {
-
     }
 
     void Start()
@@ -169,26 +162,34 @@ public class gameBoardManager : MonoBehaviour
 
     public bool _getCollisionCell(Vector3 pos)
     {
-        if (pos.x > 0 && pos.x < gameBoardWidth && pos.y > 0 && pos.y < gameBoardHeight)
+        if (pos.x < 0 || pos.x > gameBoardWidth || pos.y < 0 || pos.y > gameBoardHeight)
+            return true;
+
+        else if (gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)])
         {
-            if (gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)])
-            {
-                cellController cellCollision = gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)].GetComponent<cellController>();
-                return cellCollision.collision;
-            }
+            cellCollision = gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)].GetComponent<cellController>();
+            return (cellCollision.collision);
         }
+
         return false;
     }
 
-    public void _destroyBricks(Vector3 pos)
+    public bool _getCollisionCell(Vector3 pos, int direction)
     {
-        if (pos.x > 0 && pos.x < gameBoardWidth && pos.y > 0 && pos.y < gameBoardHeight)
+        if (pos.x < 0 || pos.x > gameBoardWidth || pos.y < 0 || pos.y > gameBoardHeight)
+            return true;
+
+        else if (gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)])
         {
-            if (gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)])
+            cellCollision = gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)].GetComponent<cellController>();
+
+            if (cellCollision.collision)
             {
-                cellController cellCollision = gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)].GetComponent<cellController>();
-                cellCollision.hitCell();
+                cellCollision.hitCell(direction);
+                return true;
             }
         }
+
+        return false;
     }
 }

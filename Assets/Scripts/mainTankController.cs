@@ -18,7 +18,8 @@ public class mainTankController : MonoBehaviour
     private Axis axis = Axis.HORIZONTAL;
     private Axis previousAxis = Axis.VERTICAL;
     private Vector2 positionRound = new Vector2();
-    private GameObject bullets;
+    private GameObject goBullets;
+    private bulletController bullets;
 
     void Awake()
     {
@@ -34,27 +35,19 @@ public class mainTankController : MonoBehaviour
     {
         keyController();
         tankCollision();
-
-        if (Input.GetButtonDown("Fire1"))
-        {
-            if (!bullets)
-            {
-                bullets = Instantiate(bullet, transform.position, helper.transform.rotation) as GameObject;
-                var bc = bullets.GetComponent<bulletController>();
-                bc.type = bulletController.TypeBullet.one;
-                //Debug.Log(bc);
-            }
-        }
+        fire();
     }
 
-    private void tankCollision()
+    private void fire()
     {
-        if (gameBoard._getCollisionCell(leftHelper.transform.position) ||
-            gameBoard._getCollisionCell(rightHelper.transform.position) ||
-            leftHelper.transform.position.x < 0 || leftHelper.transform.position.x > gameBoard._gameBoardWidth ||
-            leftHelper.transform.position.y < 0 || leftHelper.transform.position.y > gameBoard._gameBoardHeight)
+        if (Input.GetButtonDown("Fire1"))
         {
-            SnapGrid();
+            if (!goBullets)
+            {
+                goBullets = Instantiate(bullet, transform.position, helper.transform.rotation) as GameObject;
+                bullets = goBullets.GetComponent<bulletController>();
+                bullets.type = bulletController.TypeBullet.one;
+            }
         }
     }
 
@@ -103,6 +96,15 @@ public class mainTankController : MonoBehaviour
         }
 
         Round();
+    }
+
+    private void tankCollision()
+    {
+        if (gameBoard._getCollisionCell(leftHelper.transform.position) ||
+            gameBoard._getCollisionCell(rightHelper.transform.position))
+        {
+            SnapGrid();
+        }
     }
 
     void SnapGrid()

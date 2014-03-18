@@ -12,11 +12,13 @@ public class bulletController : MonoBehaviour
     public TypeBullet type;
 
     private GameObject goGameBoard;
+    private gameBoardManager gameBoard;
 
 
     void Awake()
     {
         goGameBoard = GameObject.Find("gameBoard");
+        gameBoard = goGameBoard.GetComponent<gameBoardManager>();
     }
 
     // Use this for initialization
@@ -28,31 +30,15 @@ public class bulletController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(0, 0.08f, 0f);
-        if (Input.GetButtonDown("Fire2"))
-            Destroy(gameObject);
-
+        transform.Translate(0, 0.1f, 0f); // need speed
         bulletCollision();
     }
 
     private void bulletCollision()
     {
-        var gameBoard = goGameBoard.GetComponent<gameBoardManager>();
-
-        if (gameBoard._getCollisionCell(leftHelper.transform.position) || gameBoard._getCollisionCell(rightHelper.transform.position) ||
-            leftHelper.transform.position.x < 0 || leftHelper.transform.position.x > gameBoard._gameBoardWidth ||
-            leftHelper.transform.position.y < 0 || leftHelper.transform.position.y > gameBoard._gameBoardHeight)
-        {
-            if (gameBoard._getCollisionCell(rightHelper.transform.position))
-            {
-                gameBoard._destroyBricks(rightHelper.transform.position);
-            }
-
-            if (gameBoard._getCollisionCell(leftHelper.transform.position))
-            {
-                gameBoard._destroyBricks(leftHelper.transform.position);
-            }
+        if (gameBoard._getCollisionCell(leftHelper.transform.position, (int)transform.rotation.eulerAngles.z) |
+            gameBoard._getCollisionCell(rightHelper.transform.position, (int)transform.rotation.eulerAngles.z))
             Destroy(gameObject);
-        }
+
     }
 }
