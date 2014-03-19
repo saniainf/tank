@@ -151,7 +151,54 @@ public class gameBoardManager : MonoBehaviour
 
     void Start()
     {
+        int tst = 0;
 
+        tst |= 1 << 0; //Принудительно включаем бит номер n
+        Debug.Log(tst);
+
+        tst |= 1 << 1;
+        Debug.Log(tst);
+
+        tst |= 1 << 2;
+        Debug.Log(tst);
+
+        tst |= 1 << 3;
+        Debug.Log(tst);
+
+
+        tst &= ~(1 << 3); //Принудительно выключаем бит номер n
+        Debug.Log(tst);
+
+        tst &= ~(1 << 2);
+        Debug.Log(tst);
+
+        tst &= ~(1 << 1);
+        Debug.Log(tst);
+
+        tst &= ~(1 << 0);
+        Debug.Log(tst);
+
+        /* cell
+         * 
+         * 01
+         * 
+         * 0000 0
+         * 1000 8
+         * 0100 4
+         * 1100 12
+         * 0010 2
+         * 1010 10
+         * 0110 6
+         * 1110 14
+         * 0001 1
+         * 1001 9
+         * 0101 5
+         * 1101 13
+         * 0011 3
+         * 1011 11
+         * 0111 7
+         * 1111 15
+         */
     }
 
     // Update is called once per frame

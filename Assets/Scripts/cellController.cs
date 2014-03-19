@@ -10,6 +10,7 @@ public class cellController : MonoBehaviour
 
     private int live = 1;
     private SpriteRenderer spriteRenderer;
+    public char[] cellUnit = new char[] { '1', '0', '0', '1' };
 
     void Awake()
     {
@@ -25,7 +26,7 @@ public class cellController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        
     }
 
     public void hitCell(int direction)
@@ -57,5 +58,16 @@ public class cellController : MonoBehaviour
             if (!solid)
                 Destroy(gameObject);
         }
+    }
+
+    private void refreshCell()
+    {
+        //switch(new string (testString))
+        //{
+        //    case "0011":
+        //        break;
+        //}
+
+        //if (cellUnit[0] && cellUnit[1] && cellUnit[2] && cellUnit[3])
     }
 }
