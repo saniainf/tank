@@ -83,14 +83,6 @@ public class cellController : MonoBehaviour
                             refreshCell();
                             return true;
                         }
-                        else if ((cellUnit & 1 << 1) != 0)
-                        {
-                            cellUnit &= ~(1 << 0);
-                            cellUnit &= ~(1 << 1);
-                            refreshCell();
-                            return true;
-                        }
-                        else return false;
                     }
                     else
                     {
@@ -98,13 +90,6 @@ public class cellController : MonoBehaviour
                         {
                             cellUnit &= ~(1 << 2);
                             cellUnit &= ~(1 << 3);
-                            refreshCell();
-                            return true;
-                        }
-                        if ((cellUnit & 1 << 0) != 0)
-                        {
-                            cellUnit &= ~(1 << 0);
-                            cellUnit &= ~(1 << 1);
                             refreshCell();
                             return true;
                         }
@@ -121,14 +106,6 @@ public class cellController : MonoBehaviour
                             refreshCell();
                             return true;
                         }
-                        else if ((cellUnit & 1 << 2) != 0)
-                        {
-                            cellUnit &= ~(1 << 2);
-                            cellUnit &= ~(1 << 3);
-                            refreshCell();
-                            return true;
-                        }
-                        else return false;
                     }
                     else
                     {
@@ -136,13 +113,6 @@ public class cellController : MonoBehaviour
                         {
                             cellUnit &= ~(1 << 1);
                             cellUnit &= ~(1 << 0);
-                            refreshCell();
-                            return true;
-                        }
-                        if ((cellUnit & 1 << 3) != 0)
-                        {
-                            cellUnit &= ~(1 << 3);
-                            cellUnit &= ~(1 << 2);
                             refreshCell();
                             return true;
                         }
@@ -159,14 +129,6 @@ public class cellController : MonoBehaviour
                             refreshCell();
                             return true;
                         }
-                        else if ((cellUnit & 1 << 0) != 0)
-                        {
-                            cellUnit &= ~(1 << 0);
-                            cellUnit &= ~(1 << 2);
-                            refreshCell();
-                            return true;
-                        }
-                        else return false;
                     }
                     else
                     {
@@ -174,13 +136,6 @@ public class cellController : MonoBehaviour
                         {
                             cellUnit &= ~(1 << 3);
                             cellUnit &= ~(1 << 1);
-                            refreshCell();
-                            return true;
-                        }
-                        if ((cellUnit & 1 << 2) != 0)
-                        {
-                            cellUnit &= ~(1 << 2);
-                            cellUnit &= ~(1 << 0);
                             refreshCell();
                             return true;
                         }
@@ -197,14 +152,6 @@ public class cellController : MonoBehaviour
                             refreshCell();
                             return true;
                         }
-                        else if ((cellUnit & 1 << 3) != 0)
-                        {
-                            cellUnit &= ~(1 << 3);
-                            cellUnit &= ~(1 << 1);
-                            refreshCell();
-                            return true;
-                        }
-                        else return false;
                     }
                     else
                     {
@@ -215,6 +162,104 @@ public class cellController : MonoBehaviour
                             refreshCell();
                             return true;
                         }
+                    }
+                    return false;
+
+                default:
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    public bool hitCell2(int direction, bool leftHelper)
+    {
+        if (!solid)
+        {
+            switch (direction)
+            {
+                case 0:
+                    if (leftHelper)
+                    {
+                        if ((cellUnit & 1 << 1) != 0)
+                        {
+                            cellUnit &= ~(1 << 0);
+                            cellUnit &= ~(1 << 1);
+                            refreshCell();
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        if ((cellUnit & 1 << 0) != 0)
+                        {
+                            cellUnit &= ~(1 << 0);
+                            cellUnit &= ~(1 << 1);
+                            refreshCell();
+                            return true;
+                        }
+                    }
+                    return false;
+
+                case 180:
+                    if (leftHelper)
+                    {
+                        if ((cellUnit & 1 << 2) != 0)
+                        {
+                            cellUnit &= ~(1 << 2);
+                            cellUnit &= ~(1 << 3);
+                            refreshCell();
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        if ((cellUnit & 1 << 3) != 0)
+                        {
+                            cellUnit &= ~(1 << 3);
+                            cellUnit &= ~(1 << 2);
+                            refreshCell();
+                            return true;
+                        }
+                    }
+                    return false;
+
+                case 90:
+                    if (leftHelper)
+                    {
+                        if ((cellUnit & 1 << 0) != 0)
+                        {
+                            cellUnit &= ~(1 << 0);
+                            cellUnit &= ~(1 << 2);
+                            refreshCell();
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        if ((cellUnit & 1 << 2) != 0)
+                        {
+                            cellUnit &= ~(1 << 2);
+                            cellUnit &= ~(1 << 0);
+                            refreshCell();
+                            return true;
+                        }
+                    }
+                    return false;
+
+                case 270:
+                    if (leftHelper)
+                    {
+                        if ((cellUnit & 1 << 3) != 0)
+                        {
+                            cellUnit &= ~(1 << 3);
+                            cellUnit &= ~(1 << 1);
+                            refreshCell();
+                            return true;
+                        }
+                    }
+                    else
+                    {
                         if ((cellUnit & 1 << 1) != 0)
                         {
                             cellUnit &= ~(1 << 1);

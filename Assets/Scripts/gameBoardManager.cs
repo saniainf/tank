@@ -184,7 +184,16 @@ public class gameBoardManager : MonoBehaviour
             cellControl = gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)].GetComponent<cellController>();
 
             if (cellControl.collision)
-                return (cellControl.hitCell(direction, leftHelper));
+                if (cellControl.hitCell(direction, leftHelper))
+                {
+                    Debug.Log(1);
+                    return true;
+                }
+                else if (cellControl.hitCell2(direction, leftHelper))
+                {
+                    Debug.Log(2);
+                    return true;
+                }
 
         }
         return false;
