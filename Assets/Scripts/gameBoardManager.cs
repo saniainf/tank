@@ -16,7 +16,7 @@ public class gameBoardManager : MonoBehaviour
     const float gameBoardWidth = cellWidth * gameBoardCellsWidth;
 
     private GameObject[,] gameBoard = new GameObject[gameBoardCellsWidth, gameBoardCellsHight]; //[i, j]
-    private cellController cellCollision;
+    private cellController cellControl;
 
     public int _gameBoardCellsHight { get { return gameBoardCellsHight; } }
     public int _gameBoardCellsWidth { get { return gameBoardCellsWidth; } }
@@ -151,54 +151,7 @@ public class gameBoardManager : MonoBehaviour
 
     void Start()
     {
-        int tst = 0;
 
-        tst |= 1 << 0; //Принудительно включаем бит номер n
-        Debug.Log(tst);
-
-        tst |= 1 << 1;
-        Debug.Log(tst);
-
-        tst |= 1 << 2;
-        Debug.Log(tst);
-
-        tst |= 1 << 3;
-        Debug.Log(tst);
-
-
-        tst &= ~(1 << 3); //Принудительно выключаем бит номер n
-        Debug.Log(tst);
-
-        tst &= ~(1 << 2);
-        Debug.Log(tst);
-
-        tst &= ~(1 << 1);
-        Debug.Log(tst);
-
-        tst &= ~(1 << 0);
-        Debug.Log(tst);
-
-        /* cell
-         * 
-         * 01
-         * 
-         * 0000 0
-         * 1000 8
-         * 0100 4
-         * 1100 12
-         * 0010 2
-         * 1010 10
-         * 0110 6
-         * 1110 14
-         * 0001 1
-         * 1001 9
-         * 0101 5
-         * 1101 13
-         * 0011 3
-         * 1011 11
-         * 0111 7
-         * 1111 15
-         */
     }
 
     // Update is called once per frame
@@ -214,29 +167,26 @@ public class gameBoardManager : MonoBehaviour
 
         else if (gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)])
         {
-            cellCollision = gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)].GetComponent<cellController>();
-            return (cellCollision.collision);
+            cellControl = gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)].GetComponent<cellController>();
+            return (cellControl.collision);
         }
 
         return false;
     }
 
-    public bool _getCollisionCell(Vector3 pos, int direction)
+    public bool _getCollisionCell(Vector3 pos, int direction, bool leftHelper)
     {
         if (pos.x < 0 || pos.x > gameBoardWidth || pos.y < 0 || pos.y > gameBoardHeight)
             return true;
 
         else if (gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)])
         {
-            cellCollision = gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)].GetComponent<cellController>();
+            cellControl = gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)].GetComponent<cellController>();
 
-            if (cellCollision.collision)
-            {
-                cellCollision.hitCell(direction);
-                return true;
-            }
+            if (cellControl.collision)
+                return (cellControl.hitCell(direction, leftHelper));
+
         }
-
         return false;
     }
 }

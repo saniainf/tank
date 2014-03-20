@@ -36,8 +36,8 @@ public class bulletController : MonoBehaviour
 
     private void bulletCollision()
     {
-        if (gameBoard._getCollisionCell(leftHelper.transform.position, (int)transform.rotation.eulerAngles.z) |
-            gameBoard._getCollisionCell(rightHelper.transform.position, (int)transform.rotation.eulerAngles.z))
+        if (gameBoard._getCollisionCell(leftHelper.transform.position, (int)transform.rotation.eulerAngles.z, true) |
+            gameBoard._getCollisionCell(rightHelper.transform.position, (int)transform.rotation.eulerAngles.z, false))
             Destroy(gameObject);
 
     }

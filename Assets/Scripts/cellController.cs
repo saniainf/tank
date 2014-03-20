@@ -8,9 +8,32 @@ public class cellController : MonoBehaviour
     public bool solid;
     public Sprite[] sprites;
 
-    private int live = 1;
     private SpriteRenderer spriteRenderer;
-    public char[] cellUnit = new char[] { '1', '0', '0', '1' };
+    private int cellUnit = 15;
+
+    /* cell
+     * 
+     * 01
+     * 23
+     * 
+     * 0000 0
+     * 0001 1
+     * 0010 2
+     * 0011 3
+     * 0100 4
+     * 0101 5
+     * 0110 6
+     * 0111 7
+     * 1000 8
+     * 1001 9
+     * 1010 10
+     * 1011 11
+     * 1100 12
+     * 1101 13
+     * 1110 14
+     * 1111 15
+     * 
+     */
 
     void Awake()
     {
@@ -20,54 +43,199 @@ public class cellController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        //int b = 15;
 
+        //b |= 1 << 0; //Принудительно включаем бит номер 0
+        //Debug.Log(b);
+
+        //b &= ~(1 << 3); //Принудительно выключаем бит номер 3
+        //Debug.Log(b);
+
+        //if ((b & 1 << 2) == 1)
+        //{
+        //    //Бит с номером 2 установлен
+        //}
+        //else
+        //{
+        //    //Бит не установлен
+        //}
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
-    public void hitCell(int direction)
+    public bool hitCell(int direction, bool leftHelper)
     {
-        if (live > 0)
+        if (!solid)
         {
-            live--;
             switch (direction)
             {
                 case 0:
-                    spriteRenderer.sprite = sprites[2];
-                    break;
+                    if (leftHelper)
+                    {
+                        if ((cellUnit & 1 << 3) != 0)
+                        {
+                            cellUnit &= ~(1 << 2);
+                            cellUnit &= ~(1 << 3);
+                            refreshCell();
+                            return true;
+                        }
+                        else if ((cellUnit & 1 << 1) != 0)
+                        {
+                            cellUnit &= ~(1 << 0);
+                            cellUnit &= ~(1 << 1);
+                            refreshCell();
+                            return true;
+                        }
+                        else return false;
+                    }
+                    else
+                    {
+                        if ((cellUnit & 1 << 2) != 0)
+                        {
+                            cellUnit &= ~(1 << 2);
+                            cellUnit &= ~(1 << 3);
+                            refreshCell();
+                            return true;
+                        }
+                        if ((cellUnit & 1 << 0) != 0)
+                        {
+                            cellUnit &= ~(1 << 0);
+                            cellUnit &= ~(1 << 1);
+                            refreshCell();
+                            return true;
+                        }
+                    }
+                    return false;
 
                 case 180:
-                    spriteRenderer.sprite = sprites[1];
-                    break;
+                    if (leftHelper)
+                    {
+                        if ((cellUnit & 1 << 0) != 0)
+                        {
+                            cellUnit &= ~(1 << 0);
+                            cellUnit &= ~(1 << 1);
+                            refreshCell();
+                            return true;
+                        }
+                        else if ((cellUnit & 1 << 2) != 0)
+                        {
+                            cellUnit &= ~(1 << 2);
+                            cellUnit &= ~(1 << 3);
+                            refreshCell();
+                            return true;
+                        }
+                        else return false;
+                    }
+                    else
+                    {
+                        if ((cellUnit & 1 << 1) != 0)
+                        {
+                            cellUnit &= ~(1 << 1);
+                            cellUnit &= ~(1 << 0);
+                            refreshCell();
+                            return true;
+                        }
+                        if ((cellUnit & 1 << 3) != 0)
+                        {
+                            cellUnit &= ~(1 << 3);
+                            cellUnit &= ~(1 << 2);
+                            refreshCell();
+                            return true;
+                        }
+                    }
+                    return false;
 
                 case 90:
-                    spriteRenderer.sprite = sprites[4];
-                    break;
+                    if (leftHelper)
+                    {
+                        if ((cellUnit & 1 << 1) != 0)
+                        {
+                            cellUnit &= ~(1 << 1);
+                            cellUnit &= ~(1 << 3);
+                            refreshCell();
+                            return true;
+                        }
+                        else if ((cellUnit & 1 << 0) != 0)
+                        {
+                            cellUnit &= ~(1 << 0);
+                            cellUnit &= ~(1 << 2);
+                            refreshCell();
+                            return true;
+                        }
+                        else return false;
+                    }
+                    else
+                    {
+                        if ((cellUnit & 1 << 3) != 0)
+                        {
+                            cellUnit &= ~(1 << 3);
+                            cellUnit &= ~(1 << 1);
+                            refreshCell();
+                            return true;
+                        }
+                        if ((cellUnit & 1 << 2) != 0)
+                        {
+                            cellUnit &= ~(1 << 2);
+                            cellUnit &= ~(1 << 0);
+                            refreshCell();
+                            return true;
+                        }
+                    }
+                    return false;
 
                 case 270:
-                    spriteRenderer.sprite = sprites[3];
-                    break;
+                    if (leftHelper)
+                    {
+                        if ((cellUnit & 1 << 2) != 0)
+                        {
+                            cellUnit &= ~(1 << 2);
+                            cellUnit &= ~(1 << 0);
+                            refreshCell();
+                            return true;
+                        }
+                        else if ((cellUnit & 1 << 3) != 0)
+                        {
+                            cellUnit &= ~(1 << 3);
+                            cellUnit &= ~(1 << 1);
+                            refreshCell();
+                            return true;
+                        }
+                        else return false;
+                    }
+                    else
+                    {
+                        if ((cellUnit & 1 << 0) != 0)
+                        {
+                            cellUnit &= ~(1 << 0);
+                            cellUnit &= ~(1 << 2);
+                            refreshCell();
+                            return true;
+                        }
+                        if ((cellUnit & 1 << 1) != 0)
+                        {
+                            cellUnit &= ~(1 << 1);
+                            cellUnit &= ~(1 << 3);
+                            refreshCell();
+                            return true;
+                        }
+                    }
+                    return false;
+
+                default:
+                    return false;
             }
         }
-        else
-        {
-            if (!solid)
-                Destroy(gameObject);
-        }
+        return true;
     }
 
     private void refreshCell()
     {
-        //switch(new string (testString))
-        //{
-        //    case "0011":
-        //        break;
-        //}
-
-        //if (cellUnit[0] && cellUnit[1] && cellUnit[2] && cellUnit[3])
+        if (cellUnit == 0)
+            Destroy(gameObject);
+        spriteRenderer.sprite = sprites[cellUnit];
     }
 }
