@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class mainTankController : MonoBehaviour
+public class enemyTankController : MonoBehaviour
 {
     enum Axis { HORIZONTAL, VERTICAL }
 
@@ -21,40 +21,60 @@ public class mainTankController : MonoBehaviour
     private GameObject goBullets;
     private bulletController bullets;
 
+    private int vertical = 0;
+    private int horizontal = 0;
+
     void Awake()
     {
         spriteRenderer = renderer as SpriteRenderer;
     }
 
+    // Use this for initialization
     void Start()
     {
         SnapGrid();
+        vertical = 1;
     }
 
+    // Update is called once per frame
     void Update()
     {
-        keyController();
+        aiTank();
         tankCollision();
-        fire();
     }
 
-    private void fire()
+    private void changeDirection()
     {
-        if (Input.GetButtonDown("Fire1"))
+        int i = 0;
+        i = Random.Range(0, 4);
+        switch (i)
         {
-            if (!goBullets)
-            {
-                goBullets = Instantiate(bullet, transform.position, helper.transform.rotation) as GameObject;
-                bullets = goBullets.GetComponent<bulletController>();
-                bullets.type = bulletController.TypeBullet.one;
-            }
+            case 0:
+                vertical = 1;
+                horizontal = 0;
+                break;
+
+            case 1:
+                vertical = -1;
+                horizontal = 0;
+                break;
+
+            case 2:
+                vertical = 0;
+                horizontal = 1;
+                break;
+
+            case 3:
+                vertical = 0;
+                horizontal = -1;
+                break;
         }
     }
 
-    private void keyController()
+    private void aiTank()
     {
-        vectorVertical = Input.GetAxisRaw("Vertical") * speed;
-        vectorHorizontal = Input.GetAxisRaw("Horizontal") * speed;
+        vectorVertical = vertical * speed;
+        vectorHorizontal = horizontal * speed;
 
         if (vectorVertical != 0)
         {
@@ -103,6 +123,7 @@ public class mainTankController : MonoBehaviour
         if (gameBoard._getCollisionCell(leftHelper.transform.position) ||
             gameBoard._getCollisionCell(rightHelper.transform.position))
         {
+            changeDirection();
             SnapGrid();
         }
     }

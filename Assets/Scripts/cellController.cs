@@ -43,22 +43,7 @@ public class cellController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        //int b = 15;
 
-        //b |= 1 << 0; //Принудительно включаем бит номер 0
-        //Debug.Log(b);
-
-        //b &= ~(1 << 3); //Принудительно выключаем бит номер 3
-        //Debug.Log(b);
-
-        //if ((b & 1 << 2) == 1)
-        //{
-        //    //Бит с номером 2 установлен
-        //}
-        //else
-        //{
-        //    //Бит не установлен
-        //}
     }
 
     // Update is called once per frame

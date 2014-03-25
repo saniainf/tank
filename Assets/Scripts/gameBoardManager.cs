@@ -53,6 +53,7 @@ public class gameBoardManager : MonoBehaviour
     void Awake()
     {
         fillGameBoard();
+        placeBase();
     }
 
     private void fillGameBoard()
@@ -147,6 +148,22 @@ public class gameBoardManager : MonoBehaviour
             }
             line = reader.ReadLine();
         }
+    }
+
+    private void placeBase()
+    {
+        int j;
+        int i;
+        for (j = 0; j <= 1; j++)
+        {
+            i = 11;
+            gameBoard[i, j] = Instantiate(cells[0], new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
+            i = 14;
+            gameBoard[i, j] = Instantiate(cells[0], new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
+        }
+        for (i = 11; i <= 14; i++)
+            gameBoard[i, j] = Instantiate(cells[0], new Vector3((i * cellWidth) + cellHalfWidth, (j * cellHeight) + cellHalfHeight, 5), Quaternion.identity) as GameObject;
+
     }
 
     void Start()
