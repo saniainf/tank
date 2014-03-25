@@ -67,9 +67,9 @@ public class cellController : MonoBehaviour
 
     }
 
-    public bool hitCell(int direction, bool leftHelper)
+    public bool hitCellFirst(int direction, bool leftHelper)
     {
-        if (!solid)
+        if (!solid && collision)
         {
             switch (direction)
             {
@@ -172,9 +172,9 @@ public class cellController : MonoBehaviour
         return true;
     }
 
-    public bool hitCell2(int direction, bool leftHelper)
+    public bool hitCellSecond(int direction, bool leftHelper)
     {
-        if (!solid)
+        if (!solid && collision)
         {
             switch (direction)
             {

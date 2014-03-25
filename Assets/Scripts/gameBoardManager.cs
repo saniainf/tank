@@ -174,27 +174,45 @@ public class gameBoardManager : MonoBehaviour
         return false;
     }
 
-    public bool _getCollisionCell(Vector3 pos, int direction, bool leftHelper)
+    public bool _getCollisionCell(Vector3 posLeft, Vector3 posRight, int direction)
     {
-        if (pos.x < 0 || pos.x > gameBoardWidth || pos.y < 0 || pos.y > gameBoardHeight)
+        if (posLeft.x < 0 || posLeft.x > gameBoardWidth || posLeft.y < 0 || posLeft.y > gameBoardHeight) // столкновение с краем
             return true;
 
-        else if (gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)])
+        else
         {
-            cellControl = gameBoard[(int)(pos.x / cellWidth), (int)(pos.y / cellHeight)].GetComponent<cellController>();
+            bool collisionLeft = false;
+            bool collisionRight = false;
 
-            if (cellControl.collision)
-                if (cellControl.hitCell(direction, leftHelper))
-                {
-                    Debug.Log(1);
-                    return true;
-                }
-                else if (cellControl.hitCell2(direction, leftHelper))
-                {
-                    Debug.Log(2);
-                    return true;
-                }
+            // one
+            if (gameBoard[(int)(posLeft.x / cellWidth), (int)(posLeft.y / cellHeight)]) // cell !NULL
+            {
+                cellControl = gameBoard[(int)(posLeft.x / cellWidth), (int)(posLeft.y / cellHeight)].GetComponent<cellController>();
+                collisionLeft = (cellControl.hitCellFirst(direction, true));
+            }
 
+            if (gameBoard[(int)(posRight.x / cellWidth), (int)(posRight.y / cellHeight)]) // cell !NULL
+            {
+                cellControl = gameBoard[(int)(posRight.x / cellWidth), (int)(posRight.y / cellHeight)].GetComponent<cellController>();
+                collisionRight = (cellControl.hitCellFirst(direction, false));
+            }
+            if (collisionLeft || collisionRight)
+                return true;
+
+            // two
+            if (gameBoard[(int)(posLeft.x / cellWidth), (int)(posLeft.y / cellHeight)]) // cell !NULL
+            {
+                cellControl = gameBoard[(int)(posLeft.x / cellWidth), (int)(posLeft.y / cellHeight)].GetComponent<cellController>();
+                collisionLeft = (cellControl.hitCellSecond(direction, true));
+            }
+
+            if (gameBoard[(int)(posRight.x / cellWidth), (int)(posRight.y / cellHeight)]) // cell !NULL
+            {
+                cellControl = gameBoard[(int)(posRight.x / cellWidth), (int)(posRight.y / cellHeight)].GetComponent<cellController>();
+                collisionRight = (cellControl.hitCellSecond(direction, false));
+            }
+            if (collisionLeft || collisionRight)
+                return true;
         }
         return false;
     }
